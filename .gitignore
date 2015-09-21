@@ -1,3 +1,8 @@
+# IDE-specific files
+workspace.xml
+.idea
+.idea\workspace.xml
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
