@@ -105,11 +105,13 @@ class Tribool(object):
         True
         >>> a < c
         True
-        >>> b = Tribool(True)
+        >>> b == Tribool(True)
         True
         >>> a < c < b
         True
-        >>> b > c
+        >>> b < c
+        False
+
         :param other:
         :return:
         """
@@ -118,8 +120,74 @@ class Tribool(object):
     def __repr__(self):
         return "Tribool({})".format(self.__value)
 
-    def __cmp__(self, other):
-        pass
+    def __lt__(self, other):
+        selfvalue = self.__value
+        othervalue = other.__value
+        if selfvalue is None:
+            selfvalue = -1
+        if othervalue is None:
+            othervalue = -1
+        return selfvalue < othervalue
+
+    def __bool__(self):
+        return self.__value == True
+
+    def __invert__(self):
+        if self.__value is None:
+            return None
+        return not self.__value
+
+    def __and__(self, other):
+        """
+        >>> a = Tribool()
+        >>> b = Tribool(True)
+        >>> c = Tribool(False)
+        >>> a & b
+        Tribool(None)
+        >>> a & c
+        Tribool(False)
+        >>> b & c
+        Tribool(False)
+        >>> b & Tribool(True)
+        Tribool(True)
+        >>> print(a & a)
+        None
+        >>> print(b & b)
+        True
+        >>> print(c & c)
+        False
+        """
+        if self.__value == True and other.__value == True:
+            return Tribool(True)
+        if self.__value == False or other.__value == False:
+            return Tribool(False)
+        return Tribool()
+
+    def __or__(self, other):
+        """
+        >>> a = Tribool()
+        >>> b = Tribool(True)
+        >>> c = Tribool(False)
+        >>> a | b
+        Tribool(True)
+        >>> a | c
+        Tribool(None)
+        >>> b | c
+        Tribool(True)
+        >>> a | Tribool()
+        Tribool(None)
+        >>> print(a | a)
+        None
+        >>> print(b | b)
+        True
+        >>> print(c | c)
+        False
+        """
+        if self.__value == True or other.__value == True:
+            return Tribool(True)
+        if self.__value == False and other.__value == False:
+            return Tribool(False)
+        return Tribool()
 
 
 def main():
@@ -137,5 +205,4 @@ main()
 
 if __name__ == "__main__":
     import doctest
-
     doctest.testmod()
