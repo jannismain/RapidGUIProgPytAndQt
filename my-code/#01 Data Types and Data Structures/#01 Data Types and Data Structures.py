@@ -2,8 +2,6 @@
 #coding: utf-8
 
 import decimal
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
 
 print("Hello World")
 

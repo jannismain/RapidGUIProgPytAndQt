@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-from math import *
+import sys
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
