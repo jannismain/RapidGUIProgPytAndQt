@@ -1,13 +1,16 @@
 #!/usr/bin
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+import sys
+
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 __version__ = "1.0.0"
 __author__ = "mainczjs"
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QMdiArea):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.image = QImage()
@@ -74,7 +77,7 @@ class MainWindow(QMainWindow):
         self.addActions(helpMenu, (helpAbout, helpHelp))
 
         fileMenu = self.menuBar().addMenu("&File")
-        self.fileMenuActions = (fileNewActionm
+        self.fileMenuActions = (fileNewAction,
         fileOpenAction, fileSaveAction, fileSaveAsAction, \
         None, filePrintAction, fileQuitAction)
         self.connect(self.fileMenu, SIGNAL("aboutToShow()"), self.updateFileMenu)
@@ -128,3 +131,24 @@ class MainWindow(QMainWindow):
                 target.addSeperator()
             else:
                 target.addAction(action)
+
+    def main(self):
+        app = QApplication(sys.argv)
+        app.setOrganizationName("Qtrac Ltd.")
+        app.setOrganizationDomain("qtrac.eu")
+        app.setApplicationName("Image Changer")
+        app.setWindowIcon(QIcon(":/icon.png"))
+        form = MainWindow()
+        form.show()
+        app.exec_()
+
+        settings = QSettings()
+        self.recentFiles = settings.value("Recent Files").toStringList()
+        size = settings.value("MainWindow/Size", QVariant(QSize(600, 500))).toSize()
+        self.resize(size)
+        position = settings.value("MainWindow/Position", QVariant(QPoint(0, 0))).toPoint()
+        self.move(position)
+        self.setWindowTitle("Image Changer")
+        self.updateFileMenu()
+
+
